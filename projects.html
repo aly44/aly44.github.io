@@ -1,204 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects - Aly Embaby</title>
+  <meta property="og:title" content="Aly Embaby - Projects">
+  <meta property="og:description"
+    content="A collection of my game development projects in Unity, Unreal Engine 5, and C++.">
+  <meta property="og:image" content="https://aly44.github.io/Preview.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles.css" />
   <style>
     /* ── CUSTOM CURSOR ── */
-    @media (hover: hover) { * { cursor: none !important; } }
+    @media (hover: hover) {
+      * {
+        cursor: none !important;
+      }
+    }
+
     #cursor {
-      position: fixed; left: -100px; top: -100px;
-      width: 22px; height: 22px;
-      pointer-events: none; z-index: 10001;
+      position: fixed;
+      left: -100px;
+      top: -100px;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      z-index: 10001;
       transform: translate(-50%, -50%);
       transition: transform 0.15s ease-out, opacity 0.3s;
       opacity: 0;
     }
-    #cursor::before, #cursor::after {
-      content: ''; position: absolute;
-      background: rgba(0,212,255,0.8);
-    }
-    #cursor::before {
-      width: 100%; height: 1px;
-      top: 50%; left: 0; transform: translateY(-50%);
-    }
+
+    #cursor::before,
     #cursor::after {
-      width: 1px; height: 100%;
-      left: 50%; top: 0; transform: translateX(-50%);
+      content: '';
+      position: absolute;
+      background: rgba(0, 212, 255, 0.8);
     }
+
+    #cursor::before {
+      width: 100%;
+      height: 1px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    #cursor::after {
+      width: 1px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+
     .cur-dot {
-      position: absolute; width: 3px; height: 3px;
-      background: var(--cyan); border-radius: 50%;
-      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--cyan);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
-    #cursor.hov { transform: translate(-50%, -50%) scale(1.6); }
-    #cursor.hov::before, #cursor.hov::after { background: var(--cyan); }
+
+    #cursor.hov {
+      transform: translate(-50%, -50%) scale(1.6);
+    }
+
+    #cursor.hov::before,
+    #cursor.hov::after {
+      background: var(--cyan);
+    }
 
     /* ── SCROLL PROGRESS BAR ── */
     #scroll-progress {
-      position: fixed; top: 0; left: 0;
-      height: 2px; width: 0%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
       background: linear-gradient(90deg, var(--cyan), var(--purple));
       z-index: 9998;
       transition: width 0.1s linear;
-      box-shadow: 0 0 8px rgba(0,212,255,0.5);
+      box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
     }
 
     /* ── PAGE HERO ── */
-    .page-hero { position: relative; overflow: hidden; }
+    .page-hero {
+      position: relative;
+      overflow: hidden;
+    }
+
     .page-hero .watermark {
       position: absolute;
-      top: 50%; right: -0.5rem;
+      top: 50%;
+      right: -0.5rem;
       transform: translateY(-50%);
       font-family: var(--font-head);
       font-size: clamp(5rem, 16vw, 10rem);
-      font-weight: 700; letter-spacing: -0.04em;
-      color: rgba(255,255,255,0.025);
-      pointer-events: none; user-select: none;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: rgba(255, 255, 255, 0.025);
+      pointer-events: none;
+      user-select: none;
       line-height: 1;
     }
+
     .hero-anim {
       opacity: 0;
       animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── GLITCH ON HEADING SPAN ── */
     #glitch-heading {
-      position: relative; display: inline-block;
+      position: relative;
+      display: inline-block;
     }
+
     #glitch-heading.glitching {
       animation: glitch-base 0.38s steps(1) forwards;
     }
+
     #glitch-heading.glitching::before,
     #glitch-heading.glitching::after {
       content: attr(data-text);
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
     }
+
     #glitch-heading.glitching::before {
       color: #ff2d78;
       animation: glitch-a 0.38s steps(2) forwards;
       clip-path: polygon(0 18%, 100% 18%, 100% 44%, 0 44%);
     }
+
     #glitch-heading.glitching::after {
-      color: var(--cyan); opacity: 0.8;
+      color: var(--cyan);
+      opacity: 0.8;
       animation: glitch-b 0.38s steps(2) forwards;
       clip-path: polygon(0 58%, 100% 58%, 100% 82%, 0 82%);
     }
+
     @keyframes glitch-base {
-      0%  { transform: translateX(0); }
-      25% { transform: translateX(-5px) skewX(-1deg); }
-      75% { transform: translateX(4px); }
-      100%{ transform: translateX(0); }
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px) skewX(-1deg);
+      }
+
+      75% {
+        transform: translateX(4px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
     }
+
     @keyframes glitch-a {
-      0%  { transform: translateX(-10px); opacity: 0.9; }
-      50% { transform: translateX(7px); }
-      100%{ transform: translateX(-2px); opacity: 0; }
+      0% {
+        transform: translateX(-10px);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: translateX(7px);
+      }
+
+      100% {
+        transform: translateX(-2px);
+        opacity: 0;
+      }
     }
+
     @keyframes glitch-b {
-      0%  { transform: translateX(10px); opacity: 0.8; }
-      50% { transform: translateX(-6px); }
-      100%{ transform: translateX(2px); opacity: 0; }
+      0% {
+        transform: translateX(10px);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: translateX(-6px);
+      }
+
+      100% {
+        transform: translateX(2px);
+        opacity: 0;
+      }
     }
 
     /* ── LIGHTBOX ── */
     #lightbox {
-      position: fixed; inset: 0;
-      background: rgba(6,6,10,0.92);
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 6, 10, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 10000;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.25s;
     }
-    #lightbox.open { opacity: 1; pointer-events: all; }
+
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
     #lightbox img {
-      height: 82vh; width: auto;
+      height: 82vh;
+      width: auto;
       max-width: 92vw;
-      object-fit: contain; border-radius: 6px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,212,255,0.12);
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 212, 255, 0.12);
       transform: scale(0.94);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    #lightbox.open img { transform: scale(1); }
+
+    #lightbox.open img {
+      transform: scale(1);
+    }
+
     #lightbox-close {
-      position: absolute; top: 1.25rem; right: 1.5rem;
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
       font-family: var(--font-head);
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--muted); background: none; border: none;
-      cursor: pointer; transition: color 0.2s;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
       padding: 0.5rem;
     }
-    #lightbox-close:hover { color: var(--cyan); }
+
+    #lightbox-close:hover {
+      color: var(--cyan);
+    }
+
     .lb-arrow {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      font-size: 2rem; line-height: 1;
-      color: var(--muted); background: rgba(6,6,10,0.6);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 50%; width: 48px; height: 48px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: color 0.2s, border-color 0.2s;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--muted);
+      background: rgba(6, 6, 10, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       user-select: none;
     }
-    .lb-arrow:hover { color: var(--cyan); border-color: rgba(0,212,255,0.3); }
-    #lb-prev { left: 1.5rem; }
-    #lb-next { right: 1.5rem; }
+
+    .lb-arrow:hover {
+      color: var(--cyan);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    #lb-prev {
+      left: 1.5rem;
+    }
+
+    #lb-next {
+      right: 1.5rem;
+    }
+
     .lb-counter {
-      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
       font-family: var(--font-head);
-      font-size: 0.65rem; font-weight: 600;
-      letter-spacing: 0.1em; color: var(--muted2);
-    }
-    #lightbox-caption {
-      position: absolute; bottom: 1.5rem;
-      font-family: var(--font-head);
-      font-size: 0.7rem; letter-spacing: 0.08em;
-      color: var(--muted2); text-transform: uppercase;
-    }
-    .hero-meta {
-      display: flex; gap: 2rem; flex-wrap: wrap;
-      margin-top: 1.5rem;
-    }
-    .hero-meta-item {
-      font-family: var(--font-head);
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       color: var(--muted2);
     }
-    .hero-meta-item span { color: var(--cyan); }
+
+    #lightbox-caption {
+      position: absolute;
+      bottom: 1.5rem;
+      font-family: var(--font-head);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--muted2);
+      text-transform: uppercase;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .hero-meta-item {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+
+    .hero-meta-item span {
+      color: var(--cyan);
+    }
 
     /* ── FILTER BAR ── */
     .filter-bar {
-      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
       margin-bottom: 2.5rem;
     }
+
     .filter-btn {
       font-family: var(--font-head);
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--muted);
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 0.38rem 1rem; border-radius: 3px;
+      padding: 0.38rem 1rem;
+      border-radius: 3px;
       cursor: pointer;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
-    .filter-btn:hover { color: var(--text); border-color: rgba(0,212,255,0.2); }
+
+    .filter-btn:hover {
+      color: var(--text);
+      border-color: rgba(0, 212, 255, 0.2);
+    }
+
     .filter-btn.active {
       color: var(--cyan);
-      border-color: rgba(0,212,255,0.35);
+      border-color: rgba(0, 212, 255, 0.35);
       background: var(--cyan-dim);
     }
 
@@ -218,11 +394,13 @@
       transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.3s;
       scroll-margin-top: 15rem;
     }
+
     .proj-card:hover {
-      border-color: rgba(0,212,255,0.28);
+      border-color: rgba(0, 212, 255, 0.28);
       transform: translateY(-3px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,255,0.06);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.06);
     }
+
     .proj-card.filtering-out {
       opacity: 0;
       transform: scale(0.97);
@@ -231,19 +409,29 @@
 
     /* ── MAIN IMAGE SLOT ── */
     .proj-main-img {
-      width: 100%; height: 360px;
-      position: relative; overflow: hidden;
+      width: 100%;
+      height: 360px;
+      position: relative;
+      overflow: hidden;
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .proj-card.featured .proj-main-img { height: 420px; }
+
+    .proj-card.featured .proj-main-img {
+      height: 420px;
+    }
 
     .proj-main-img img,
     .proj-main-img video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
+
     .proj-main-img video {
       object-fit: contain;
       background: #06060a;
@@ -252,40 +440,72 @@
     /* Shimmer overlay on hover */
     .proj-main-img::after {
       content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(0,212,255,0.07) 0%, transparent 60%);
-      opacity: 0; transition: opacity 0.3s;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.07) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
       pointer-events: none;
     }
-    .proj-card:hover .proj-main-img::after { opacity: 1; }
+
+    .proj-card:hover .proj-main-img::after {
+      opacity: 1;
+    }
 
     /* Subtle type-based tint for placeholder state */
-    .proj-main-img.unity   { background: linear-gradient(145deg, #090f1c 0%, #0c1828 100%); }
-    .proj-main-img.unreal  { background: linear-gradient(145deg, #090f1c 0%, #11091c 100%); }
-    .proj-main-img.cpp     { background: linear-gradient(145deg, #090f1c 0%, #091a0e 100%); }
-    .proj-main-img.design  { background: linear-gradient(145deg, #090f1c 0%, #170a1e 100%); }
+    .proj-main-img.unity {
+      background: linear-gradient(145deg, #090f1c 0%, #0c1828 100%);
+    }
+
+    .proj-main-img.unreal {
+      background: linear-gradient(145deg, #090f1c 0%, #11091c 100%);
+    }
+
+    .proj-main-img.cpp {
+      background: linear-gradient(145deg, #090f1c 0%, #091a0e 100%);
+    }
+
+    .proj-main-img.design {
+      background: linear-gradient(145deg, #090f1c 0%, #170a1e 100%);
+    }
 
     .proj-placeholder {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 0.5rem;
-      text-align: center; padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+      padding: 2rem;
       pointer-events: none;
     }
-    .proj-placeholder .p-icon { font-size: 2.8rem; opacity: 0.12; }
+
+    .proj-placeholder .p-icon {
+      font-size: 2.8rem;
+      opacity: 0.12;
+    }
+
     .proj-placeholder .p-name {
       font-family: var(--font-head);
       font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 700; letter-spacing: -0.03em;
-      color: var(--text); opacity: 0.08;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      opacity: 0.08;
     }
+
     .proj-placeholder .p-hint {
       font-family: var(--font-head);
-      font-size: 0.62rem; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--muted2); opacity: 0.5;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      opacity: 0.5;
       margin-top: 0.25rem;
-      border: 1px dashed rgba(255,255,255,0.08);
-      padding: 0.3rem 0.9rem; border-radius: 3px;
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      padding: 0.3rem 0.9rem;
+      border-radius: 3px;
     }
 
     /* ── THUMBNAIL ROW ── */
@@ -294,260 +514,756 @@
       grid-template-columns: repeat(3, 1fr);
       border-bottom: 1px solid var(--border);
     }
+
     .proj-thumbs.five-col {
       grid-template-columns: repeat(5, 1fr);
     }
+
     .proj-thumbs.five-col .proj-thumb {
       height: 80px;
     }
+
     .proj-thumbs.four-col {
       grid-template-columns: repeat(4, 1fr);
     }
+
     .proj-thumbs.four-col .proj-thumb {
       height: 90px;
     }
+
     .proj-thumb {
       height: 100px;
       background: var(--surface2);
       border-right: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
       transition: background 0.2s;
       cursor: default;
     }
-    .proj-thumb:last-child { border-right: none; }
-    .proj-thumb:hover { background: rgba(0,212,255,0.03); }
+
+    .proj-thumb:last-child {
+      border-right: none;
+    }
+
+    .proj-thumb:hover {
+      background: rgba(0, 212, 255, 0.03);
+    }
 
     .proj-thumb img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .proj-thumb:hover img { transform: scale(1.1); }
+
+    .proj-thumb:hover img {
+      transform: scale(1.1);
+    }
 
     .thumb-add {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 0.3rem;
-      color: var(--muted2); opacity: 0.35;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--muted2);
+      opacity: 0.35;
     }
-    .thumb-add .t-plus { font-size: 1.4rem; font-weight: 200; line-height: 1; }
+
+    .thumb-add .t-plus {
+      font-size: 1.4rem;
+      font-weight: 200;
+      line-height: 1;
+    }
+
     .thumb-add .t-label {
       font-family: var(--font-head);
-      font-size: 0.58rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     /* ── CARD BODY ── */
     .proj-body {
       padding: 1.75rem 2rem;
-      display: flex; flex-direction: column; gap: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .proj-top {
-      display: flex; justify-content: space-between;
-      align-items: flex-start; gap: 0.75rem; flex-wrap: wrap;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
     .proj-title {
       font-family: var(--font-head);
-      font-size: 1.15rem; font-weight: 700; line-height: 1.2;
-      position: relative; display: inline-block;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+      position: relative;
+      display: inline-block;
     }
+
     .proj-title::after {
       content: '';
-      position: absolute; bottom: -2px; left: 0;
-      width: 0; height: 1px;
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
       background: var(--cyan);
       transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .proj-card:hover .proj-title::after { width: 100%; }
+
+    .proj-card:hover .proj-title::after {
+      width: 100%;
+    }
 
     .proj-engine {
       font-family: var(--font-head);
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--cyan); background: var(--cyan-dim);
-      border: 1px solid rgba(0,212,255,0.15);
-      padding: 0.22rem 0.7rem; border-radius: 3px;
-      white-space: nowrap; height: fit-content;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      padding: 0.22rem 0.7rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      height: fit-content;
     }
 
     .proj-desc {
       list-style: none;
-      display: flex; flex-direction: column; gap: 0.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
     }
+
     .proj-desc li {
-      font-size: 0.875rem; color: var(--muted);
-      line-height: 1.65; padding-left: 1rem; position: relative;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+      padding-left: 1rem;
+      position: relative;
     }
+
     .proj-desc li::before {
-      content: '›'; position: absolute; left: 0;
-      color: var(--cyan); font-weight: 700;
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+      font-weight: 700;
     }
 
     .proj-intro {
-      font-size: 0.9rem; color: var(--muted);
-      line-height: 1.7; margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
     }
 
     .proj-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-top: 1rem; border-top: 1px solid var(--border);
-      gap: 0.75rem; flex-wrap: wrap;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .proj-links { display: flex; gap: 1.25rem; }
+    .proj-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+
     .proj-links a {
       font-family: var(--font-head);
-      font-size: 0.78rem; font-weight: 500;
-      letter-spacing: 0.04em; color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--muted);
       transition: color 0.2s;
     }
-    .proj-links a:hover { color: var(--cyan); }
+
+    .proj-links a:hover {
+      color: var(--cyan);
+    }
 
     .proj-badge {
       font-family: var(--font-head);
-      font-size: 0.65rem; font-weight: 700;
+      font-size: 0.65rem;
+      font-weight: 700;
       letter-spacing: 0.08em;
-      color: var(--green); background: var(--green-dim);
-      border: 1px solid rgba(0,232,122,0.2);
-      padding: 0.2rem 0.6rem; border-radius: 3px;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid rgba(0, 232, 122, 0.2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
     }
 
     /* ── HIDDEN CARD (filter) ── */
-    .proj-card.filtered-out { display: none; }
+    .proj-card.filtered-out {
+      display: none;
+    }
 
     /* ── CORNER BRACKETS (injected by JS) ── */
     .card-frame {
-      position: absolute; inset: 0;
-      pointer-events: none; z-index: 5;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
     }
+
     .card-frame::before {
       content: '';
-      position: absolute; top: 10px; left: 10px;
-      width: 18px; height: 18px;
-      border-top: 1px solid rgba(0,212,255,0.3);
-      border-left: 1px solid rgba(0,212,255,0.3);
-      opacity: 0; transition: opacity 0.3s;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 18px;
+      height: 18px;
+      border-top: 1px solid rgba(0, 212, 255, 0.3);
+      border-left: 1px solid rgba(0, 212, 255, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
+
     .card-frame::after {
       content: '';
-      position: absolute; bottom: 10px; right: 10px;
-      width: 18px; height: 18px;
-      border-bottom: 1px solid rgba(0,212,255,0.3);
-      border-right: 1px solid rgba(0,212,255,0.3);
-      opacity: 0; transition: opacity 0.3s;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+      border-right: 1px solid rgba(0, 212, 255, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
+
     .proj-card:hover .card-frame::before,
-    .proj-card:hover .card-frame::after { opacity: 1; }
+    .proj-card:hover .card-frame::after {
+      opacity: 1;
+    }
 
     /* ── CARD INDEX WATERMARK (injected by JS) ── */
     .proj-num {
-      position: absolute; bottom: 1.5rem; right: 1.75rem;
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.75rem;
       font-family: var(--font-head);
-      font-size: 5.5rem; font-weight: 700; letter-spacing: -0.06em;
-      color: rgba(255,255,255,0.03); line-height: 1;
-      pointer-events: none; user-select: none; z-index: 0;
+      font-size: 5.5rem;
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      color: rgba(255, 255, 255, 0.03);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
     }
 
     /* ── CAPSTONE PULSE BAR (injected by JS) ── */
     .capstone-pulse {
-      position: absolute; top: 0; left: 0; bottom: 0;
-      width: 2px; background: var(--cyan);
-      pointer-events: none; z-index: 6;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--cyan);
+      pointer-events: none;
+      z-index: 6;
       animation: pulse-glow 3s ease-in-out infinite;
     }
+
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 6px rgba(0,212,255,0.3); opacity: 0.7; }
-      50%       { box-shadow: 0 0 22px rgba(0,212,255,0.7); opacity: 1; }
+
+      0%,
+      100% {
+        box-shadow: 0 0 6px rgba(0, 212, 255, 0.3);
+        opacity: 0.7;
+      }
+
+      50% {
+        box-shadow: 0 0 22px rgba(0, 212, 255, 0.7);
+        opacity: 1;
+      }
     }
 
     /* ── TAG HOVER (clickable) ── */
-    .tags span { cursor: pointer; transition: opacity 0.2s; }
-    .tags span:hover { opacity: 0.7; }
+    .tags span {
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .tags span:hover {
+      opacity: 0.7;
+    }
 
     /* ── FILTER COUNT BADGES ── */
     .f-count {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 16px; height: 16px; padding: 0 4px;
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      border-radius: 8px; font-size: 0.58rem; margin-left: 0.35rem;
-      color: var(--muted2); vertical-align: middle; line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.58rem;
+      margin-left: 0.35rem;
+      color: var(--muted2);
+      vertical-align: middle;
+      line-height: 1;
     }
+
     .filter-btn.active .f-count {
-      background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.25);
+      background: rgba(0, 212, 255, 0.12);
+      border-color: rgba(0, 212, 255, 0.25);
       color: var(--cyan);
     }
 
     /* ── BACK TO TOP ── */
     #back-top {
-      position: fixed; bottom: 2rem; right: 2rem;
-      width: 38px; height: 38px;
-      background: var(--surface); border: 1px solid rgba(0,212,255,0.22);
-      border-radius: 50%; color: var(--cyan);
-      font-size: 1.1rem; font-weight: 300;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; z-index: 200;
-      opacity: 0; transform: translateY(8px); pointer-events: none;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 38px;
+      height: 38px;
+      background: var(--surface);
+      border: 1px solid rgba(0, 212, 255, 0.22);
+      border-radius: 50%;
+      color: var(--cyan);
+      font-size: 1.1rem;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
       transition: opacity 0.3s, transform 0.3s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
-    #back-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    #back-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
     #back-top:hover {
-      background: var(--cyan-dim); border-color: rgba(0,212,255,0.5);
-      box-shadow: 0 0 18px rgba(0,212,255,0.18);
+      background: var(--cyan-dim);
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 0 18px rgba(0, 212, 255, 0.18);
+    }
+
+    /* ── DRIVE MODE BUTTON ── */
+    .drive-mode-btn {
+      margin-left: auto;
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0, 212, 255, 0.35);
+      padding: 0.38rem 1.1rem;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+
+    .drive-mode-btn:hover {
+      color: #fff;
+      border-color: rgba(0, 212, 255, 0.7);
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 14px rgba(0, 212, 255, 0.2);
+    }
+
+    @media (max-width: 640px) {
+      .drive-mode-btn {
+        display: none;
+      }
     }
 
     /* ── SIDE PROJECT NAV DOTS ── */
     #proj-nav {
-      position: fixed; right: 1.25rem; top: 50%;
+      position: fixed;
+      right: 1.25rem;
+      top: 50%;
       transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 0.6rem;
-      z-index: 150; pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      z-index: 150;
+      pointer-events: none;
     }
+
     .pn-dot {
       position: relative;
-      width: 6px; height: 6px; border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
       background: var(--muted2);
-      cursor: pointer; pointer-events: all;
+      cursor: pointer;
+      pointer-events: all;
       opacity: 0.4;
       transition: background 0.25s, transform 0.25s, opacity 0.25s, box-shadow 0.25s;
     }
+
     .pn-dot::before {
       content: attr(data-title);
-      position: absolute; right: 14px; top: 50%;
+      position: absolute;
+      right: 14px;
+      top: 50%;
       transform: translateY(-50%);
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); font-family: var(--font-head);
-      font-size: 0.65rem; letter-spacing: 0.03em;
-      padding: 0.22rem 0.6rem; border-radius: 3px;
-      white-space: nowrap; opacity: 0; pointer-events: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      letter-spacing: 0.03em;
+      padding: 0.22rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.2s;
     }
-    .pn-dot:hover { opacity: 0.8; }
-    .pn-dot:hover::before { opacity: 1; }
-    .pn-dot.active {
-      background: var(--cyan); opacity: 1;
-      transform: scale(1.6);
-      box-shadow: 0 0 8px rgba(0,212,255,0.5);
+
+    .pn-dot:hover {
+      opacity: 0.8;
     }
-    .pn-dot.dot-hidden { opacity: 0.1; cursor: default; }
-    .pn-dot.dot-hidden::before { display: none; }
-    @media (max-width: 900px) { #proj-nav { display: none; } }
+
+    .pn-dot:hover::before {
+      opacity: 1;
+    }
+
+    .pn-dot.active {
+      background: var(--cyan);
+      opacity: 1;
+      transform: scale(1.6);
+      box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    }
+
+    .pn-dot.dot-hidden {
+      opacity: 0.1;
+      cursor: default;
+    }
+
+    .pn-dot.dot-hidden::before {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      #proj-nav {
+        display: none;
+      }
+    }
 
     @media (max-width: 640px) {
-      .proj-main-img { height: 240px; }
-      .proj-card.featured .proj-main-img { height: 280px; }
-      .proj-thumb { height: 75px; }
-      .proj-body { padding: 1.25rem; }
-      .filter-bar { gap: 0.4rem; }
-      .filter-btn { font-size: 0.65rem; padding: 0.32rem 0.75rem; }
+      .proj-main-img {
+        height: 240px;
+      }
+
+      .proj-card.featured .proj-main-img {
+        height: 280px;
+      }
+
+      .proj-thumb {
+        height: 75px;
+      }
+
+      .proj-body {
+        padding: 1.25rem;
+      }
+
+      .filter-bar {
+        gap: 0.4rem;
+      }
+
+      .filter-btn {
+        font-size: 0.65rem;
+        padding: 0.32rem 0.75rem;
+      }
+    }
+
+    /* ── DRIVE MODE BANNER ── */
+    .drive-banner {
+      display: block;
+      position: relative;
+      margin-bottom: 2.5rem;
+      text-decoration: none;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      background: rgba(0, 8, 16, 0.7);
+      padding: 2rem 2.5rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      animation: drive-banner-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes drive-banner-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 24px rgba(0, 212, 255, 0.18), 0 0 0 1px rgba(0, 212, 255, 0.06) inset;
+      }
+
+      50% {
+        box-shadow: 0 0 50px rgba(0, 212, 255, 0.35), 0 0 0 1px rgba(0, 212, 255, 0.12) inset;
+      }
+    }
+
+    .drive-banner:hover {
+      border-color: rgba(0, 212, 255, 0.85);
+      animation: none;
+      box-shadow: 0 0 70px rgba(0, 212, 255, 0.45), 0 0 0 1px rgba(0, 212, 255, 0.15) inset;
+    }
+
+    .drive-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(180deg, transparent 0, transparent 2px,
+          rgba(0, 212, 255, 0.025) 2px, rgba(0, 212, 255, 0.025) 3px);
+    }
+
+    .drive-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(110deg, transparent 35%, rgba(0, 212, 255, 0.07) 50%, transparent 65%);
+      transform: translateX(-100%);
+      transition: transform 0.55s ease;
+    }
+
+    .drive-banner:hover::after {
+      transform: translateX(100%);
+    }
+
+    .drive-banner-inner {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .drive-banner-icon {
+      font-size: 3.2rem;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.6));
+      animation: drive-icon-bob 2s ease-in-out infinite;
+    }
+
+    @keyframes drive-icon-bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .drive-banner-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .drive-banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-head);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0, 212, 255, 0.35);
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 0.55rem;
+      transform: translateY(-6px);
+    }
+
+    .drive-banner-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 6px var(--cyan);
+      animation: dot-blink 1.2s ease-in-out infinite;
+    }
+
+    @keyframes dot-blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.2
+      }
+    }
+
+    .drive-banner-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin: 0 0 0.3rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .drive-banner-title::before,
+    .drive-banner-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .drive-banner-title::before {
+      color: var(--purple);
+      animation: glitch-a2 6s steps(1) infinite;
+      clip-path: polygon(0 20%, 100% 20%, 100% 48%, 0 48%);
+    }
+
+    .drive-banner-title::after {
+      color: var(--cyan);
+      opacity: 0.75;
+      animation: glitch-b2 6s steps(1) infinite;
+      clip-path: polygon(0 58%, 100% 58%, 100% 80%, 0 80%);
+    }
+
+    @keyframes glitch-a2 {
+
+      0%,
+      89%,
+      100% {
+        transform: none;
+        opacity: 0;
+      }
+
+      90% {
+        transform: translateX(-4px);
+        opacity: 0.8;
+      }
+
+      92% {
+        transform: translateX(3px);
+        opacity: 0.6;
+      }
+
+      94% {
+        transform: none;
+        opacity: 0;
+      }
+    }
+
+    @keyframes glitch-b2 {
+
+      0%,
+      89%,
+      100% {
+        transform: none;
+        opacity: 0;
+      }
+
+      91% {
+        transform: translateX(5px);
+        opacity: 0.75;
+      }
+
+      93% {
+        transform: translateX(-2px);
+        opacity: 0.5;
+      }
+
+      95% {
+        transform: none;
+        opacity: 0;
+      }
+    }
+
+    .drive-banner-sub {
+      font-family: var(--font-head);
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .drive-banner-sub span {
+      color: var(--cyan);
+    }
+
+    .drive-banner-cta {
+      flex-shrink: 0;
+      font-family: var(--font-head);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      padding: 0.6rem 1.4rem;
+      border-radius: 4px;
+      background: rgba(0, 212, 255, 0.07);
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    .drive-banner:hover .drive-banner-cta {
+      background: rgba(0, 212, 255, 0.16);
+      border-color: rgba(0, 212, 255, 0.8);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    @media (max-width: 640px) {
+      .drive-banner {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div id="scroll-progress"></div>
-  <div id="cursor"><div class="cur-dot"></div></div>
+  <div id="cursor">
+    <div class="cur-dot"></div>
+  </div>
 
   <canvas id="page-bg"></canvas>
 
@@ -573,13 +1289,43 @@
     <div class="page-hero">
       <span class="watermark" aria-hidden="true">WORK</span>
       <span class="overline hero-anim" id="typed-overline" style="animation-delay:0.1s"></span>
-      <h1 class="hero-anim" style="animation-delay:0.2s"><span id="glitch-heading" data-text="Projects.">Projects.</span></h1>
-      <p class="hero-anim" style="animation-delay:0.35s; color:var(--muted);">Games, systems, and design work built at Algonquin College and beyond.</p>
+      <h1 class="hero-anim" style="animation-delay:0.2s"><span id="glitch-heading"
+          data-text="Projects.">Projects.</span></h1>
+      <p class="hero-anim" style="animation-delay:0.35s; color:var(--muted);">Games, systems, and design work built at
+        Algonquin College and beyond.</p>
       <div class="hero-meta hero-anim" style="animation-delay:0.5s">
         <span class="hero-meta-item"><span id="proj-count">0</span> Projects</span>
-        <span class="hero-meta-item">Unity &nbsp;&middot;&nbsp; Unreal &nbsp;&middot;&nbsp; C++ &nbsp;&middot;&nbsp; Design</span>
+        <span class="hero-meta-item">Unity &nbsp;&middot;&nbsp; Unreal &nbsp;&middot;&nbsp; C++ &nbsp;&middot;&nbsp;
+          Design</span>
       </div>
     </div>
+
+    <!-- ── DRIVE MODE BANNER (desktop only) ── -->
+    <a href="drive.html" class="drive-banner reveal" aria-label="Enter Drive Mode">
+      <div class="drive-banner-inner">
+        <div class="drive-banner-icon">
+          <svg width="60" height="30" viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18C4 14.6863 6.68629 12 10 12H54C57.3137 12 60 14.6863 60 18V24H4V18Z" fill="url(#carGradBanner)"/>
+            <path d="M14 12L20 4H44L50 12H14Z" fill="rgba(0, 212, 255, 0.2)" stroke="var(--cyan)" stroke-width="2"/>
+            <circle cx="16" cy="24" r="5" fill="#06060a" stroke="var(--cyan)" stroke-width="2"/>
+            <circle cx="48" cy="24" r="5" fill="#06060a" stroke="var(--cyan)" stroke-width="2"/>
+            <defs>
+              <linearGradient id="carGradBanner" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--cyan)" />
+                <stop offset="100%" stop-color="#006e8c" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="drive-banner-text">
+          <div class="drive-banner-badge">Desktop Only - PC / Laptop</div>
+          <div class="drive-banner-title" data-text="Try Drive Mode.">Try Drive Mode.</div>
+          <div class="drive-banner-sub">An <span>interactive drive-through</span> of my portfolio - scroll or use
+            WASD and Arrows to cruise through every project.</div>
+        </div>
+        <div class="drive-banner-cta">Enter &rarr;</div>
+      </div>
+    </a>
 
     <div class="filter-bar reveal">
       <button class="filter-btn active" data-filter="all">All</button>
@@ -594,7 +1340,8 @@
       <!-- ── 1. GOING ONCE! ── -->
       <div class="proj-card featured reveal" id="going-once" data-types="unity">
         <div class="proj-main-img unity">
-          <video src="Going%20Once!/Trailer.mp4" alt="Going Once! gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Going%20Once!/Trailer.mp4" alt="Going Once! gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -619,10 +1366,12 @@
             <span class="tag-purple">Achievements</span>
             <span class="tag-purple">Tutorial</span>
           </div>
-          <p class="proj-intro">A cozy art inspection and auction house simulator built with an 11-person team. Players inspect artwork, arrange their gallery, and run live auctions with quick time events.</p>
+          <p class="proj-intro">A cozy art inspection and auction house simulator built with an 11-person team. Players
+            inspect artwork, arrange their gallery, and run live auctions with quick time events.</p>
           <ul class="proj-desc">
             <li>Developed several of the tool minigames used during the art inspection phase.</li>
-            <li>Built reusable systems shared across all minigames including a base tool class and callable popup system.</li>
+            <li>Built reusable systems shared across all minigames including a base tool class and callable popup
+              system.</li>
             <li>Implemented the main menu, pause menu, settings, achievement system, and tutorial system.</li>
             <li>Collaborated in an 11-person multidisciplinary team using Git and Jira.</li>
             <li>Produced structured technical documentation including UML and sequence diagrams.</li>
@@ -640,7 +1389,8 @@
       <!-- ── 2. RUINOUS HUNTER ── -->
       <div class="proj-card reveal" id="ruinous-hunter" data-types="unreal">
         <div class="proj-main-img unreal">
-          <video src="RuinousHunter/Ruinous%20Hunter.mp4" alt="Ruinous Hunter gameplay" muted loop playsinline autoplay controls></video>
+          <video src="RuinousHunter/Ruinous%20Hunter.mp4" alt="Ruinous Hunter gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs four-col">
           <div class="proj-thumb">
@@ -668,10 +1418,14 @@
             <span class="tag-purple">Combat</span>
             <span class="tag-purple">Enemy AI</span>
           </div>
-          <p class="proj-intro">Part-time Game Developer at Liquid Metal Games on Ruinous Hunter, a dark fantasy Soulslike about a memory-stricken mercenary who recovers fragments of his past by defeating bosses, each memory unlocking new powers. Focused on combat, traversal, and AI systems.</p>
+          <p class="proj-intro">Part-time Game Developer at Liquid Metal Games on Ruinous Hunter, a dark fantasy
+            Soulslike about a memory-stricken mercenary who recovers fragments of his past by defeating bosses, each
+            memory unlocking new powers. Focused on combat, traversal, and AI systems.</p>
           <ul class="proj-desc">
-            <li>Developed gameplay systems in Blueprints, C++, and GAS including health/shield/stamina, and hit reactions.</li>
-            <li>Implemented player combat including dashing, dodging, multiple weapon types with equip/unequip, projectiles, and socket-based weapon attachment.</li>
+            <li>Developed gameplay systems in Blueprints, C++, and GAS including health/shield/stamina, and hit
+              reactions.</li>
+            <li>Implemented player combat including dashing, dodging, multiple weapon types with equip/unequip,
+              projectiles, and socket-based weapon attachment.</li>
             <li>Built traversal and movement systems including mantling, camera shake, and level transitions.</li>
             <li>Improved FPS by 20-30 frames by implementing distance-based rendering for foliage.</li>
             <li>Programmed enemy AI with patrol behaviours, death logic, and combat interactions.</li>
@@ -688,7 +1442,8 @@
       <!-- ── MARIO GAMES ── -->
       <div class="proj-card reveal" id="mario-games" data-types="unity unreal">
         <div class="proj-main-img unity">
-          <video src="Mario/Mario%20Porfolio%20Project.mp4" alt="Mario Games gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Mario/Mario%20Porfolio%20Project.mp4" alt="Mario Games gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs five-col">
           <div class="proj-thumb">
@@ -718,11 +1473,13 @@
             <span class="tag-purple">Gameplay Systems</span>
             <span class="tag-purple">C#</span>
           </div>
-          <p class="proj-intro">A Mario-inspired platformer built in Unity featuring a full lava-themed level with 10+ enemy types, interactive hazards, and custom gameplay systems.</p>
+          <p class="proj-intro">A Mario-inspired platformer built in Unity featuring a full lava-themed level with 10+
+            enemy types, interactive hazards, and custom gameplay systems.</p>
           <ul class="proj-desc">
             <li>Designed and built a lava level with hazards like Podoboos, Roto Discs, Thwomps, and Spikes.</li>
             <li>Programmed enemy behaviors - Dry Bones, Goombas, Piranha Plants, and the Donut Lift platform.</li>
-            <li>Implemented interactive systems: Question Mark blocks, hidden item boxes, coin-to-block toggle switch, and power-ups (One-Up, Flower Power).</li>
+            <li>Implemented interactive systems: Question Mark blocks, hidden item boxes, coin-to-block toggle switch,
+              and power-ups (One-Up, Flower Power).</li>
             <li>Rebuilt some of the same enemies in Unreal Engine to learn how Unreal handles platformer mechanics.</li>
           </ul>
           <div class="proj-footer">
@@ -736,7 +1493,8 @@
       <!-- ── 4. TOWER DEFENSE ── -->
       <div class="proj-card reveal" id="tower-defense" data-types="cpp">
         <div class="proj-main-img cpp">
-          <video src="Tower%20Def/TowerDef.mp4" alt="Tower Defense gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Tower%20Def/TowerDef.mp4" alt="Tower Defense gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -762,10 +1520,13 @@
             <span class="tag-purple">Tower Placement</span>
             <span class="tag-purple">Pathfinding</span>
           </div>
-          <p class="proj-intro">A top-down tower defense built in C++ on a small OpenGL framework. Place towers and walls to shape the path enemies take, then survive five waves that get harder each round.</p>
+          <p class="proj-intro">A top-down tower defense built in C++ on a small OpenGL framework. Place towers and
+            walls to shape the path enemies take, then survive five waves that get harder each round.</p>
           <ul class="proj-desc">
-            <li>Built a 5-wave system with faster spawns, tougher enemy mixes, and a short break with a coin bonus between waves.</li>
-            <li>Added three placement modes - tower, wall, and sell - with sell refunding coins and recalculating enemy paths.</li>
+            <li>Built a 5-wave system with faster spawns, tougher enemy mixes, and a short break with a coin bonus
+              between waves.</li>
+            <li>Added three placement modes - tower, wall, and sell - with sell refunding coins and recalculating enemy
+              paths.</li>
             <li>Made three enemy types (Basic, Fast, Tank) each with their own speed, health, and damage values.</li>
             <li>Wrote a player health system that drains when enemies reach the end and triggers game over at zero.</li>
             <li>Built ImGui HUD showing wave progress, coins, kills, and a color-shifting health bar.</li>
@@ -815,12 +1576,15 @@
             <span class="tag-purple">Heightmap Terrain</span>
             <span class="tag-purple">Multi-Light Shader</span>
           </div>
-          <p class="proj-intro">A C++ game engine built from scratch over a semester, growing from a rotating cube to a full 3D scene with terrain, physics, and lighting.</p>
+          <p class="proj-intro">A C++ game engine built from scratch over a semester, growing from a rotating cube to a
+            full 3D scene with terrain, physics, and lighting.</p>
           <ul class="proj-desc">
             <li>Built an entity-component system with scenes, game objects, and a component manager.</li>
             <li>Wrote a resource manager that handles meshes, textures, shaders, and materials.</li>
-            <li>Wrapped Box2D and Jolt Physics behind a single interface so 2D and 3D scenes share the same physics calls.</li>
-            <li>Loaded OBJ models and built a heightmap terrain mesh from a PNG, with barycentric sampling so the player walks on the surface.</li>
+            <li>Wrapped Box2D and Jolt Physics behind a single interface so 2D and 3D scenes share the same physics
+              calls.</li>
+            <li>Loaded OBJ models and built a heightmap terrain mesh from a PNG, with barycentric sampling so the player
+              walks on the surface.</li>
             <li>Wrote a multi-light fragment shader that picks the closest 8 lights per object each frame.</li>
             <li>Added a free camera with mouse look and keyboard input.</li>
           </ul>
@@ -835,7 +1599,8 @@
       <!-- ── 6. PATH OF TRIALS ── -->
       <div class="proj-card reveal" id="platformer" data-types="unreal design">
         <div class="proj-main-img unreal">
-          <video src="SideScroller/SideScroller%20Project.mp4" alt="Path of Trials gameplay" muted loop playsinline autoplay controls></video>
+          <video src="SideScroller/SideScroller%20Project.mp4" alt="Path of Trials gameplay" muted loop playsinline
+            autoplay controls></video>
         </div>
         <div class="proj-thumbs five-col">
           <div class="proj-thumb">
@@ -864,11 +1629,14 @@
             <span class="tag-cyan">Unreal Engine</span>
             <span class="tag-purple">Documentation</span>
           </div>
-          <p class="proj-intro">A 2D platformer level designed in Unreal Engine 5 with 12 interconnected rooms featuring platforming, combat, puzzles, and parkour challenges.</p>
+          <p class="proj-intro">A 2D platformer level designed in Unreal Engine 5 with 12 interconnected rooms featuring
+            platforming, combat, puzzles, and parkour challenges.</p>
           <ul class="proj-desc">
-            <li>Designed 12 interconnected rooms with distinct challenges - platforming, combat, puzzles, and parkour.</li>
+            <li>Designed 12 interconnected rooms with distinct challenges - platforming, combat, puzzles, and parkour.
+            </li>
             <li>Planned and tuned difficulty curve using a pacing chart across all rooms.</li>
-            <li>Ran playtests, collected feedback, and iterated - replaced a frustrating spike section with a more balanced design.</li>
+            <li>Ran playtests, collected feedback, and iterated - replaced a frustrating spike section with a more
+              balanced design.</li>
             <li>Produced full documentation: mini-map with legend, pacing chart, and playtest analysis.</li>
           </ul>
           <div class="proj-footer">
@@ -882,7 +1650,8 @@
       <!-- ── 7. 2D STEALTH GAME ── -->
       <div class="proj-card reveal" id="stealth-game" data-types="unity">
         <div class="proj-main-img unity">
-          <video src="Stealth/Stealth%20Project.mp4" alt="2D Stealth Game gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Stealth/Stealth%20Project.mp4" alt="2D Stealth Game gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs five-col">
           <div class="proj-thumb">
@@ -912,7 +1681,8 @@
             <span class="tag-purple">Enemy AI</span>
             <span class="tag-purple">Fog of War</span>
           </div>
-          <p class="proj-intro">A top-down stealth game in Unity where players sneak past enemies using distractions and cover. Features enemy FOV cones, fog of war, and 3 levels with increasing difficulty.</p>
+          <p class="proj-intro">A top-down stealth game in Unity where players sneak past enemies using distractions and
+            cover. Features enemy FOV cones, fog of war, and 3 levels with increasing difficulty.</p>
           <ul class="proj-desc">
             <li>Top-down 2D stealth game with enemy field-of-view detection and fog-of-war systems.</li>
             <li>Implemented distraction mechanics for player interaction and strategic gameplay.</li>
@@ -929,7 +1699,8 @@
       <!-- ── 8. SURVIVORS ── -->
       <div class="proj-card reveal" id="survivors" data-types="cpp">
         <div class="proj-main-img cpp">
-          <video src="Survivors/Survivors.mp4" alt="Survivors gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Survivors/Survivors.mp4" alt="Survivors gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -953,9 +1724,12 @@
             <span class="tag-purple">Enemy AI</span>
             <span class="tag-purple">Sprite Animation</span>
           </div>
-          <p class="proj-intro">A top-down survivors-style shooter made in C++ using a 2D game framework. Enemies spawn in waves and the player's weapons fire on their own. Killing enemies drops XP balls, and picking them up makes the weapons stronger.</p>
+          <p class="proj-intro">A top-down survivors-style shooter made in C++ using a 2D game framework. Enemies spawn
+            in waves and the player's weapons fire on their own. Killing enemies drops XP balls, and picking them up
+            makes the weapons stronger.</p>
           <ul class="proj-desc">
-            <li>Two auto-firing weapons - one shoots at the closest enemy, the other fires a ring of bullets around the player.</li>
+            <li>Two auto-firing weapons - one shoots at the closest enemy, the other fires a ring of bullets around the
+              player.</li>
             <li>XP balls drop when enemies die and speed up the weapons when picked up.</li>
             <li>Two enemy types with their own speed, health, and animations.</li>
             <li>HUD shows XP, kills, and time.</li>
@@ -971,7 +1745,8 @@
       <!-- ── 9. SPRINT RACER ── -->
       <div class="proj-card reveal" id="sprint-racer" data-types="cpp">
         <div class="proj-main-img cpp">
-          <video src="Sprint%20Racer/Sprint%20Racer.mp4" alt="Sprint Racer gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Sprint%20Racer/Sprint%20Racer.mp4" alt="Sprint Racer gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -995,7 +1770,8 @@
             <span class="tag-purple">Lap Timer</span>
             <span class="tag-purple">Pickups</span>
           </div>
-          <p class="proj-intro">A top-down arcade racer built in C++ using a 2D game framework. Drawn entirely with basic shapes for a retro look.</p>
+          <p class="proj-intro">A top-down arcade racer built in C++ using a 2D game framework. Drawn entirely with
+            basic shapes for a retro look.</p>
           <ul class="proj-desc">
             <li>Built car physics with smooth acceleration, braking, and wall bouncing.</li>
             <li>Made a reusable Tween class for animating pickups, menus, and race results.</li>
@@ -1013,7 +1789,8 @@
       <!-- ── 10. ARCADE MINIGAMES ── -->
       <div class="proj-card reveal" id="arcade-minigames" data-types="unity">
         <div class="proj-main-img unity">
-          <video src="Arcade/Arcade%20Minigames%20Project.mp4" alt="Arcade Minigames gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Arcade/Arcade%20Minigames%20Project.mp4" alt="Arcade Minigames gameplay" muted loop playsinline
+            autoplay controls></video>
         </div>
         <div class="proj-thumbs five-col">
           <div class="proj-thumb">
@@ -1046,7 +1823,8 @@
           <p class="proj-intro">A collection of arcade-style minigames built in Unity using UI Toolkit.</p>
           <ul class="proj-desc">
             <li>Built 12 arcade minigames in Unity with a central hub for navigation between games.</li>
-            <li>Designed per-game color themes using UI Toolkit (UXML/USS) with consistent styling across all screens.</li>
+            <li>Designed per-game color themes using UI Toolkit (UXML/USS) with consistent styling across all screens.
+            </li>
             <li>Implemented persistent high score tracking for each game using PlayerPrefs.</li>
           </ul>
           <div class="proj-footer">
@@ -1060,7 +1838,8 @@
       <!-- ── 11. AI TANK COMBAT ── -->
       <div class="proj-card reveal" id="ai-tank-combat" data-types="unity">
         <div class="proj-main-img unity">
-          <video src="AI%20Tank%20Combat/AI%20Tank%20Combat.mp4" alt="AI Tank Combat gameplay" muted loop playsinline autoplay controls></video>
+          <video src="AI%20Tank%20Combat/AI%20Tank%20Combat.mp4" alt="AI Tank Combat gameplay" muted loop playsinline
+            autoplay controls></video>
         </div>
         <div class="proj-thumbs four-col">
           <div class="proj-thumb">
@@ -1087,12 +1866,15 @@
             <span class="tag-purple">Blackboard</span>
             <span class="tag-purple">AI</span>
           </div>
-          <p class="proj-intro">A player-vs-AI tank game in Unity where the AI uses a behaviour tree to hunt down the player's detonator.</p>
+          <p class="proj-intro">A player-vs-AI tank game in Unity where the AI uses a behaviour tree to hunt down the
+            player's detonator.</p>
           <ul class="proj-desc">
             <li>Built a behaviour tree with custom action nodes for turret aiming, shooting, and tank movement.</li>
             <li>AI scans and shoots barrels to uncover hidden detonators, prioritizing the player's over its own.</li>
-            <li>When the player's detonator is exposed, the AI switches to a chase strategy and tries to run it over.</li>
-            <li>Used a blackboard to share game state between nodes (barrel list, detonator positions, tank status).</li>
+            <li>When the player's detonator is exposed, the AI switches to a chase strategy and tries to run it over.
+            </li>
+            <li>Used a blackboard to share game state between nodes (barrel list, detonator positions, tank status).
+            </li>
             <li>Made the AI defend its own detonator when revealed and time shots around a 0.4 second cooldown.</li>
           </ul>
           <div class="proj-footer">
@@ -1106,7 +1888,8 @@
       <!-- ── 12. AI SLOT CARS ── -->
       <div class="proj-card reveal" id="ai-slot-cars" data-types="unity">
         <div class="proj-main-img unity">
-          <video src="AI%20Slot%20Cars/AI%20Slot%20Cars.mp4" alt="AI Slot Cars gameplay" muted loop playsinline autoplay controls></video>
+          <video src="AI%20Slot%20Cars/AI%20Slot%20Cars.mp4" alt="AI Slot Cars gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -1133,7 +1916,8 @@
           <p class="proj-intro">A player-vs-AI slot car racer built in Unity on a figure-eight spline track.</p>
           <ul class="proj-desc">
             <li>Laid out a figure-eight track using Catmull-Rom splines with two parallel paths.</li>
-            <li>Built AI driving logic that samples ahead on the spline to detect sharp corners and adjust speed automatically.</li>
+            <li>Built AI driving logic that samples ahead on the spline to detect sharp corners and adjust speed
+              automatically.</li>
             <li>Added crash detection based on corner radius - exceeding the speed limit sends the car into a spin.</li>
             <li>Implemented player controls with acceleration, braking, and a spacebar reset for crashes.</li>
             <li>Displayed per-car lap count, speed, crash state, and a winner screen on the HUD.</li>
@@ -1149,7 +1933,8 @@
       <!-- ── 13. ASTEROIDS ── -->
       <div class="proj-card reveal" id="asteroids" data-types="cpp">
         <div class="proj-main-img cpp">
-          <video src="Asteroids/Asteroids.mp4" alt="Asteroids gameplay" muted loop playsinline autoplay controls></video>
+          <video src="Asteroids/Asteroids.mp4" alt="Asteroids gameplay" muted loop playsinline autoplay
+            controls></video>
         </div>
         <div class="proj-thumbs">
           <div class="proj-thumb">
@@ -1173,12 +1958,15 @@
             <span class="tag-purple">Screen Wrap</span>
             <span class="tag-purple">Pickups</span>
           </div>
-          <p class="proj-intro">A classic arcade Asteroids made in C++ using a 2D game framework. Built as a single-player score run where you clear 20 asteroids to win.</p>
+          <p class="proj-intro">A classic arcade Asteroids made in C++ using a 2D game framework. Built as a
+            single-player score run where you clear 20 asteroids to win.</p>
           <ul class="proj-desc">
             <li>Created a triangle-shaped player ship with input driven movement and Spacebar shooting.</li>
-            <li>Implemented 20 asteroids that destroy in one hit, with collision detection against the player and bullets.</li>
+            <li>Implemented 20 asteroids that destroy in one hit, with collision detection against the player and
+              bullets.</li>
             <li>Programmed player death and respawn logic when an asteroid hits the ship.</li>
-            <li>Added screen-wrap behaviour so the ship, bullets, and asteroids re-enter from the opposite side when they leave the play area.</li>
+            <li>Added screen-wrap behaviour so the ship, bullets, and asteroids re-enter from the opposite side when
+              they leave the play area.</li>
             <li>Designed a shield pickup with a 1 in 7 drop chance from destroyed asteroids.</li>
             <li>Built a game-won text screen that triggers once all asteroids are cleared.</li>
           </ul>
@@ -1219,7 +2007,7 @@
       let visible = false;
       document.addEventListener('mousemove', e => {
         cur.style.left = e.clientX + 'px';
-        cur.style.top  = e.clientY + 'px';
+        cur.style.top = e.clientY + 'px';
         if (!visible) { cur.style.opacity = '1'; visible = true; }
       });
       document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; visible = false; });
@@ -1258,10 +2046,10 @@
     // ── WATERMARK PARALLAX ──
     (function () {
       const hero = document.querySelector('.page-hero');
-      const wm   = hero ? hero.querySelector('.watermark') : null;
+      const wm = hero ? hero.querySelector('.watermark') : null;
       if (!hero || !wm) return;
       document.addEventListener('mousemove', e => {
-        const dx = (e.clientX / window.innerWidth  - 0.5) * 18;
+        const dx = (e.clientX / window.innerWidth - 0.5) * 18;
         const dy = (e.clientY / window.innerHeight - 0.5) * 10;
         wm.style.transform = `translateY(calc(-50% + ${dy}px)) translateX(${dx}px)`;
       });
@@ -1269,14 +2057,14 @@
 
     // ── FILTER (smooth transition) ──
     (function () {
-      const btns     = document.querySelectorAll('.filter-btn');
+      const btns = document.querySelectorAll('.filter-btn');
       const allCards = [...document.querySelectorAll('.proj-card')];
 
       function filterCards(filter) {
         allCards.forEach(card => {
           const types = (card.dataset.types || '').split(' ');
           const match = filter === 'all' || types.includes(filter);
-          const dot   = document.querySelector(`#proj-nav [data-target="${card.id}"]`);
+          const dot = document.querySelector(`#proj-nav [data-target="${card.id}"]`);
 
           if (match) {
             card.classList.remove('filtered-out');
@@ -1310,10 +2098,10 @@
       const allCards = [...document.querySelectorAll('.proj-card')];
       document.querySelectorAll('.filter-btn').forEach(btn => {
         const filter = btn.dataset.filter;
-        const count  = filter === 'all'
+        const count = filter === 'all'
           ? allCards.length
           : allCards.filter(c => (c.dataset.types || '').split(' ').includes(filter)).length;
-        const label  = btn.textContent.trim();
+        const label = btn.textContent.trim();
         btn.innerHTML = `${label}<span class="f-count">${count}</span>`;
       });
     })();
@@ -1386,17 +2174,17 @@
 
     // ── LIGHTBOX WITH GALLERY NAVIGATION ──
     (function () {
-      const lb      = document.getElementById('lightbox');
-      const lbImg   = document.getElementById('lightbox-img');
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
       const lbClose = document.getElementById('lightbox-close');
-      const lbCap   = document.getElementById('lightbox-caption');
-      const lbPrev  = document.getElementById('lb-prev');
-      const lbNext  = document.getElementById('lb-next');
+      const lbCap = document.getElementById('lightbox-caption');
+      const lbPrev = document.getElementById('lb-prev');
+      const lbNext = document.getElementById('lb-next');
       const lbCount = document.getElementById('lb-counter');
       if (!lb) return;
 
       let gallery = [];   // array of {src, alt} for the current card
-      let galIdx  = 0;
+      let galIdx = 0;
 
       function show(idx) {
         galIdx = idx;
@@ -1459,7 +2247,7 @@
         entries.forEach(e => {
           if (!e.isIntersecting) return;
           const isCard = e.target.classList.contains('proj-card');
-          const delay  = isCard ? Math.min(cardsSeen * 80, 240) : 0;
+          const delay = isCard ? Math.min(cardsSeen * 80, 240) : 0;
           if (isCard) cardsSeen++;
           setTimeout(() => e.target.classList.add('revealed'), delay);
           io.unobserve(e.target);
@@ -1493,10 +2281,10 @@
 
       cards.forEach(card => {
         const title = card.querySelector('.proj-title')?.textContent.trim() || '';
-        const dot   = document.createElement('div');
+        const dot = document.createElement('div');
         dot.className = 'pn-dot';
         dot.dataset.target = card.id;
-        dot.dataset.title  = title;
+        dot.dataset.title = title;
         dot.addEventListener('click', () => {
           document.getElementById(card.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
@@ -1516,4 +2304,5 @@
     })();
   </script>
 </body>
+
 </html>

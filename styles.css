@@ -33,6 +33,20 @@
   to   { opacity: 1; }
 }
 
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 10px;
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--muted2);
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan);
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--bg); /* background lives here so blobs at z-index:-1 show through */
