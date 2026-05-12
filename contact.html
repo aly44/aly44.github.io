@@ -13,6 +13,7 @@
   <style>
     /* ── CUSTOM CURSOR ── */
     @media (hover: hover) { * { cursor: none !important; } }
+    @media (hover: hover) { input, textarea, select { cursor: text !important; } }
     #cursor {
       position: fixed; left: -100px; top: -100px;
       width: 22px; height: 22px;
@@ -237,6 +238,91 @@
     .resume-box p {
       color: var(--muted); font-size: 0.9rem; margin-bottom: 1.75rem;
     }
+
+    /* ── CONTACT FORM ── */
+    .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-field { display: flex; flex-direction: column; gap: 0.45rem; }
+    .form-field label {
+      font-family: var(--font-head);
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .form-field input,
+    .form-field textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      resize: vertical;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: var(--muted); opacity: 0.6; }
+    .form-field input:focus,
+    .form-field textarea:focus {
+      border-color: rgba(0,212,255,0.4);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.06);
+    }
+    .form-field textarea { min-height: 130px; }
+    .form-success {
+      display: none; padding: 0.9rem 1.25rem;
+      background: rgba(0,232,122,0.07);
+      border: 1px solid rgba(0,232,122,0.25);
+      border-radius: 4px; color: var(--green);
+      font-family: var(--font-head); font-size: 0.82rem;
+      font-weight: 600; letter-spacing: 0.05em;
+    }
+
+    /* ── EMAIL CARD PULSE ── */
+    @keyframes email-pulse {
+      0%,100% { border-color: rgba(255,255,255,0.07); box-shadow: none; }
+      50%      { border-color: rgba(0,212,255,0.3); box-shadow: 0 0 0 4px rgba(0,212,255,0.07), 0 0 28px rgba(0,212,255,0.1); }
+    }
+    #email-card { animation: email-pulse 3.5s ease-in-out infinite; }
+    #email-card:hover { animation-play-state: paused; }
+
+    /* ── TERMINAL BLOCK ── */
+    .terminal-block {
+      font-family: 'Courier New', 'Consolas', monospace;
+      font-size: 0.82rem;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 32px;
+      position: relative;
+      line-height: 1.7;
+      box-shadow: 0 0 20px rgba(0,212,255,0.06) inset, 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .terminal-block::before {
+      content: '● ● ●';
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: rgba(0,212,255,0.3);
+    }
+    .terminal-lines { padding-top: 8px; }
+    .terminal-line { display: block; margin-bottom: 2px; }
+    .terminal-line .t-prompt { color: #00d4ff; }
+    .terminal-line .t-text { color: rgba(240,239,248,0.75); }
+    .terminal-line .t-ok { color: #00e87a; }
+    .terminal-input-row { display: flex; align-items: center; }
+    .terminal-prompt { color: #00d4ff; }
+    .terminal-cursor-blink {
+      color: #00d4ff;
+      animation: cur-blink 1s step-end infinite;
+      font-weight: 700;
+    }
+    @keyframes cur-blink { 0%,100%{opacity:1} 50%{opacity:0} }
   </style>
 </head>
 <body>
@@ -288,8 +374,15 @@
         <span class="sec-line"></span>
         <span class="sec-title">Reach Out</span>
       </div>
+      <div class="terminal-block reveal">
+        <div class="terminal-lines" id="terminal-lines"></div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt">&gt;&nbsp;</span>
+          <span class="terminal-cursor-blink">_</span>
+        </div>
+      </div>
       <div class="contact-grid">
-        <a href="mailto:aly.embabyy@gmail.com" class="contact-card reveal">
+        <a href="mailto:aly.embabyy@gmail.com" id="email-card" class="contact-card reveal">
           <span class="c-symbol" aria-hidden="true">@</span>
           <div class="c-platform">Email</div>
           <div class="c-value">aly.embabyy@gmail.com</div>
@@ -310,10 +403,40 @@
       </div>
     </div>
 
-    <!-- RESUME -->
+    <!-- CONTACT FORM -->
     <div class="sec-block reveal">
       <div class="sec-head" style="margin-bottom: 1.25rem;">
         <span class="sec-num">02</span>
+        <span class="sec-line"></span>
+        <span class="sec-title">Send a Message</span>
+      </div>
+      <!-- Replace YOUR_FORM_ID: sign up free at formspree.io, create a form, paste your ID -->
+      <form class="contact-form" action="https://formspree.io/f/xgoddojq" method="POST">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="form-field">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="cf-msg">Message</label>
+          <textarea id="cf-msg" name="message" placeholder="What's on your mind?" required></textarea>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+          <button type="submit" class="btn btn-cyan">&#8599; Send Message</button>
+          <span class="form-success" id="form-success">Message sent - I'll get back to you soon.</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- RESUME -->
+    <div class="sec-block reveal">
+      <div class="sec-head" style="margin-bottom: 1.25rem;">
+        <span class="sec-num">03</span>
         <span class="sec-line"></span>
         <span class="sec-title">Resume</span>
       </div>
@@ -428,6 +551,102 @@
       }, { threshold: 0.1 });
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     })();
+
+    // ── CONTACT FORM AJAX ──
+    (function () {
+      var form = document.querySelector('.contact-form');
+      var successEl = document.getElementById('form-success');
+      if (!form || !successEl) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('button[type=submit]');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function (res) {
+          if (res.ok) {
+            form.reset();
+            successEl.style.display = 'block';
+            btn.style.display = 'none';
+          } else {
+            btn.disabled = false;
+            btn.textContent = '↗ Send Message';
+            alert('Something went wrong. Try emailing directly.');
+          }
+        }).catch(function () {
+          btn.disabled = false;
+          btn.textContent = '↗ Send Message';
+          alert('Something went wrong. Try emailing directly.');
+        });
+      });
+    })();
+
+    // Terminal typing animation
+    (function() {
+      let _tac = null;
+      function typeClick() {
+        try {
+          if (!_tac) _tac = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = _tac.createOscillator();
+          const g = _tac.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = 820;
+          g.gain.setValueAtTime(0.055, _tac.currentTime);
+          g.gain.linearRampToValueAtTime(0, _tac.currentTime + 0.018);
+          osc.connect(g); g.connect(_tac.destination);
+          osc.start(_tac.currentTime);
+          osc.stop(_tac.currentTime + 0.018);
+        } catch(e) {}
+      }
+
+      const container = document.getElementById('terminal-lines');
+      if (!container) return;
+
+      const lines = [
+        { prompt: '> ', text: 'establishing connection...', delay: 380, cls: '' },
+        { prompt: '> ', text: 'aly.embabyy@gmail.com', delay: 320, cls: '' },
+        { prompt: '> ', text: 'gameplay programmer — Ottawa, ON', delay: 280, cls: '' },
+        { prompt: '> ', text: 'open to full-time roles', delay: 240, cls: '' },
+        { prompt: '> ', text: 'online ✓', delay: 0, cls: 't-ok' },
+      ];
+
+      let lineIdx = 0, charIdx = 0, currentEl = null, currentText = '';
+
+      function typeNext() {
+        if (lineIdx >= lines.length) return;
+        const line = lines[lineIdx];
+
+        if (charIdx === 0) {
+          currentEl = document.createElement('span');
+          currentEl.className = 'terminal-line';
+          currentEl.innerHTML = `<span class="t-prompt">${line.prompt}</span><span class="t-text ${line.cls}"></span>`;
+          container.appendChild(currentEl);
+          currentText = '';
+        }
+
+        const textEl = currentEl.querySelector('.t-text');
+        if (charIdx < line.text.length) {
+          currentText += line.text[charIdx];
+          textEl.textContent = currentText;
+          typeClick();
+          charIdx++;
+          setTimeout(typeNext, 28 + Math.random() * 22);
+        } else {
+          charIdx = 0;
+          lineIdx++;
+          if (lineIdx < lines.length) {
+            setTimeout(typeNext, line.delay);
+          }
+        }
+      }
+
+      // Start after a short delay on load
+      setTimeout(typeNext, 800);
+    })();
   </script>
+  <script src="transitions.js"></script>
 </body>
 </html>

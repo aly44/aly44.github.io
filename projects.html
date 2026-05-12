@@ -18,6 +18,9 @@
       * {
         cursor: none !important;
       }
+      html.fullscreen-active * {
+        cursor: auto !important;
+      }
     }
 
     #cursor {
@@ -27,7 +30,7 @@
       width: 22px;
       height: 22px;
       pointer-events: none;
-      z-index: 10001;
+      z-index: 99999;
       transform: translate(-50%, -50%);
       transition: transform 0.15s ease-out, opacity 0.3s;
       opacity: 0;
@@ -399,6 +402,23 @@
       border-color: rgba(0, 212, 255, 0.28);
       transform: translateY(-3px);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.06);
+    }
+
+    /* ── CARD SHIMMER ── */
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 55%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.04), transparent);
+      transform: skewX(-18deg);
+      z-index: 3;
+      pointer-events: none;
+      transition: left 0s;
+    }
+    .proj-card:hover::before {
+      left: 175%;
+      transition: left 0.55s ease;
     }
 
     .proj-card.filtering-out {
@@ -2015,6 +2035,15 @@
         el.addEventListener('mouseenter', () => cur.classList.add('hov'));
         el.addEventListener('mouseleave', () => cur.classList.remove('hov'));
       });
+
+      // Restore native cursor in fullscreen so user can exit
+      ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+        document.addEventListener(evt, () => {
+          const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+          document.documentElement.classList.toggle('fullscreen-active', inFs);
+          cur.style.opacity = inFs ? '0' : (visible ? '1' : '0');
+        });
+      });
     })();
 
     // ── SCROLL PROGRESS BAR ──
@@ -2211,11 +2240,15 @@
         show(galIdx);
         lb.classList.add('open');
         document.body.style.overflow = 'hidden';
+        const cur = document.getElementById('cursor');
+        if (cur) { cur.style.zIndex = '99999'; cur.style.opacity = '1'; }
       }
 
       function close() {
         lb.classList.remove('open');
         document.body.style.overflow = '';
+        const cur = document.getElementById('cursor');
+        if (cur) cur.style.zIndex = '';
         setTimeout(() => { lbImg.src = ''; }, 300);
       }
 
@@ -2303,6 +2336,7 @@
       cards.forEach(card => dotIo.observe(card));
     })();
   </script>
+  <script src="transitions.js"></script>
 </body>
 
 </html>
